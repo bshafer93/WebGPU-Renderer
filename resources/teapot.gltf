@@ -1,0 +1,205 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v1.6.16",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "teapot",
+            "rotation" : [
+                0.7071068286895752,
+                0,
+                0,
+                0.7071067094802856
+            ],
+            "scale" : [
+                0.25,
+                0.25,
+                0.25
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "name" : "default",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.08188401162624359,
+                    0.8000000715255737,
+                    0.14194750785827637,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Default",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.15292617678642273,
+                    0.539479672908783,
+                    0.2015562802553177,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "teapot",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                },
+                {
+                    "attributes" : {
+                        "POSITION" : 4,
+                        "NORMAL" : 5,
+                        "TEXCOORD_0" : 6
+                    },
+                    "indices" : 7,
+                    "material" : 1
+                }
+            ]
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 36456,
+            "max" : [
+                82.29399871826172,
+                47.9283561706543,
+                0
+            ],
+            "min" : [
+                -71.89253234863281,
+                -47.9283561706543,
+                -59.87300491333008
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 36456,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 36456,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 36456,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 10656,
+            "max" : [
+                33.56470489501953,
+                33.5647087097168,
+                -58.93854904174805
+            ],
+            "min" : [
+                -33.5647087097168,
+                -33.5647087097168,
+                -79.00656127929688
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 5,
+            "componentType" : 5126,
+            "count" : 10656,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 6,
+            "componentType" : 5126,
+            "count" : 10656,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 7,
+            "componentType" : 5123,
+            "count" : 10656,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 437472,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 437472,
+            "byteOffset" : 437472
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 291648,
+            "byteOffset" : 874944
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 72912,
+            "byteOffset" : 1166592
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 127872,
+            "byteOffset" : 1239504
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 127872,
+            "byteOffset" : 1367376
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 85248,
+            "byteOffset" : 1495248
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 21312,
+            "byteOffset" : 1580496
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 1601808,
+            "uri" : "teapot.bin"
+        }
+    ]
+}

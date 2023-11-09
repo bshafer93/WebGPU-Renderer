@@ -1,0 +1,35 @@
+html,
+canvas {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    background: #000;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+canvas {
+    border: green 3px solid;
+}
+#fps {
+    color: white;
+}
+#my {
+    color: white;
+}
+#mx {
+    color: white;
+}
+input[type='range']::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+    color: white;
+}
