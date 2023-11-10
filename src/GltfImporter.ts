@@ -38,7 +38,7 @@ export default class GltfImporter {
     }
 
     /**
-     * Loads a GLTF file as as a Stage.
+     * Loads a GLTF file as a Stage.
      * @param device GPU
      * @param file_path Path of gltf file
      * @returns Stage, or in other nomenclature, a scene.
@@ -47,6 +47,7 @@ export default class GltfImporter {
         let loader = new GltfLoader();
         let uri = file_path;
         let asset = await loader.load(uri);
+        
         let gltf = asset.gltf;
         const prop_count: number = gltf.scenes[0].nodes.length;
         const mesh_count: number = gltf.meshes.length;
@@ -64,6 +65,7 @@ export default class GltfImporter {
             materials[i] = new PhongMaterial(gltf.materials[i].name, null, vec4.fromValues(0.5, 0.5, 0.5, 1), device);
 
             if ('baseColorTexture' in gltf.materials[i].pbrMetallicRoughness) {
+                console.log(`PBR_Textured_Shader Added`);
                 materials[i].shader = ShaderUtility.ShaderList.Textured_Shader;
                 materials[i].textured = true;
                 const texture_index = gltf.materials[i].pbrMetallicRoughness.baseColorTexture.index;
@@ -75,15 +77,18 @@ export default class GltfImporter {
                 materials[i].diffuse = new Texture();
                 await materials[i].diffuse.loadTexture(full_img_path, device);
             } else if ('baseColorFactor' in gltf.materials[i].pbrMetallicRoughness) {
+                console.log(`Non_Textured_Shader Added`);
                 const r = gltf.materials[i].pbrMetallicRoughness.baseColorFactor[0];
                 const g = gltf.materials[i].pbrMetallicRoughness.baseColorFactor[1];
                 const b = gltf.materials[i].pbrMetallicRoughness.baseColorFactor[2];
                 const a = gltf.materials[i].pbrMetallicRoughness.baseColorFactor[3];
                 materials[i].defaultColor = vec4.fromValues(r, g, b, a);
             } else {
+                console.log(`Non_PBR_Shader Added`);
                 materials[i].defaultColor = vec4.fromValues(0.0, 0.4, 0.3, 1.0);
             }
             if (materials[i] instanceof PBRMaterial) {
+                console.log(`PBR_Shader_Properties Adjusted`);
                 materials[i].metallic = gltf.materials[i].pbrMetallicRoughness.metallicFactor;
                 materials[i].roughness = gltf.materials[i].pbrMetallicRoughness.roughnessFactor;
             }

@@ -24,7 +24,7 @@ A simple experimental 3D renderer using WebGPU, typescript, and a bit of GLTF fo
 ### Installing & Executing
 
 ```
-1. git clone https://github.com/bshafer93/SeniorProject
+1. git clone https://github.com/bshafer93/WebGPU-Renderer
 
 2. cd SeniorProject
 

@@ -1,27 +1,27 @@
 
 //Lighting Adapted from https://learnopengl.com/Lighting/Multiple-lights
-let DIRECTIONAL_LIGHT:i32 = 1;
-let POINT_LIGHT:i32 = 2;
-let LIGHT_COUNT:i32 = 6;
-let SHININESS_DEFAULT:f32 = 30.0;
-let SPECULAR_STRENGTH_DEFAULT:f32 = 0.5;
+const DIRECTIONAL_LIGHT:i32 = 1;
+const POINT_LIGHT:i32 = 2;
+const LIGHT_COUNT:i32 = 6;
+const SHININESS_DEFAULT:f32 = 30.0;
+const SPECULAR_STRENGTH_DEFAULT:f32 = 0.5;
 
-let WHITE_COLOR:vec3<f32> = vec3<f32>(1.0,1.0,1.0);
-let BLACK_COLOR:vec3<f32> = vec3<f32>(0.0,0.0,0.0);
-let HIGH_NOON_SUN_COLOR:vec3<f32> = vec3<f32>(1.0,1.0,0.984);
+const WHITE_COLOR:vec3<f32> = vec3<f32>(1.0,1.0,1.0);
+const BLACK_COLOR:vec3<f32> = vec3<f32>(0.0,0.0,0.0);
+const HIGH_NOON_SUN_COLOR:vec3<f32> = vec3<f32>(1.0,1.0,0.984);
 
-let POINT_LIGHT_CONSTANT:f32 =1.0;
-let POINT_LIGHT_QUADRATIC:f32 =0.032;
-let POINT_LIGHT_LINEAR:f32 =0.09;
+const POINT_LIGHT_CONSTANT:f32 =1.0;
+const POINT_LIGHT_QUADRATIC:f32 =0.032;
+const POINT_LIGHT_LINEAR:f32 =0.09;
 
 
 
 
 //Fake Normals
-let CIRCLE_NORMALS_RADIUS:f32 = 0.05;
-let CIRCLE_CENTER_COORDINATES:vec2<f32> = vec2<f32>(0.5,0.5);
+const CIRCLE_NORMALS_RADIUS:f32 = 0.05;
+const CIRCLE_CENTER_COORDINATES:vec2<f32> = vec2<f32>(0.5,0.5);
 
-let POINT_ORIGINS: array<vec2<f32>,81> = array<vec2<f32>,81>(
+const POINT_ORIGINS: array<vec2<f32>,81> = array<vec2<f32>,81>(
     vec2<f32>(0.1,0.1), vec2<f32>(0.2,0.1),vec2<f32>(0.3,0.1),vec2<f32>(0.4,0.1),vec2<f32>(0.5,0.1),vec2<f32>(0.6,0.1),vec2<f32>(0.7,0.1),vec2<f32>(0.8,0.1),vec2<f32>(0.9,0.1),
     vec2<f32>(0.1,0.2), vec2<f32>(0.2,0.2),vec2<f32>(0.3,0.2),vec2<f32>(0.4,0.2),vec2<f32>(0.5,0.2),vec2<f32>(0.6,0.2),vec2<f32>(0.7,0.2),vec2<f32>(0.8,0.2),vec2<f32>(0.9,0.2),
     vec2<f32>(0.1,0.3), vec2<f32>(0.2,0.3),vec2<f32>(0.3,0.3),vec2<f32>(0.4,0.3),vec2<f32>(0.5,0.3),vec2<f32>(0.6,0.3),vec2<f32>(0.7,0.3),vec2<f32>(0.8,0.3),vec2<f32>(0.9,0.3),
@@ -34,12 +34,12 @@ let POINT_ORIGINS: array<vec2<f32>,81> = array<vec2<f32>,81>(
     );
 
 struct VSOut {
-    [[builtin(position)]] prop_position: vec4<f32>;
-    [[location(0)]] color: vec3<f32>;
-    [[location(1)]] normal:vec3<f32>;
-    [[location(2)]] texture_coord:vec2<f32>;
-    [[location(3)]] camera_position:vec4<f32>;
-    [[location(4)]] frag_world_position:vec3<f32>;
+    @builtin(position) prop_position: vec4<f32>,
+    @location(0) color: vec3<f32>,
+    @location(1) normal:vec3<f32>,
+    @location(2) texture_coord:vec2<f32>,
+    @location(3) camera_position:vec4<f32>,
+    @location(4) frag_world_position:vec3<f32>,
 };
 
 // Info on struct alignment
@@ -48,46 +48,42 @@ struct VSOut {
 //OffsetOfMember(S, MN) = roundUp(AlignOfMember(S, MN), OffsetOfMember(S, MN-1) + SizeOfMember(S, MN-1)
 
 struct LightInfo {
-    position:vec4<f32>;  //Offset:0         
-    color:vec3<f32>;     //Offset:16(4:f32)  roundUp(AlignOfMember(S, color),       OffsetOfMember(S, position) + SizeOfMember(S, position))  : roundUp(16,0 + 16) = 16 
-    intensity:vec3<f32>; //Offset:32(8:f32)   roundUp(AlignOfMember(S, intensity), OffsetOfMember(S, color) + SizeOfMember(S, color))        : roundUp(16, 16 + 12) = ceil(28/16) * 16 = 32
+    position:vec4<f32>,  //Offset:0         
+    color:vec3<f32>,     //Offset:16(4:f32)  roundUp(AlignOfMember(S, color),       OffsetOfMember(S, position) + SizeOfMember(S, position))  : roundUp(16,0 + 16) = 16 
+    intensity:vec3<f32>, //Offset:32(8:f32)   roundUp(AlignOfMember(S, intensity), OffsetOfMember(S, color) + SizeOfMember(S, color))        : roundUp(16, 16 + 12) = ceil(28/16) * 16 = 32
     //Intensity[0] = Ambient Strength, Intensity[1] = Diffuse Strength, Intensity[2] = Specular Strength, 
 };
 //LightInfo Align:16    max(AlignOfMember(position), AlignOfMember(color),AlignOfMember(intensity) )  = max(16,16,16) = 16 
 //Size:48               roundUp(AlignOf(LightInfo), OffsetOfMember(intensity) + SizeOfMember(intensity)) = roundUp(16, 32 + 12 ) = ceil(44/16) * 16 = 48                     
 
 
-[[block]]
+//lights: @stride(48) array<LightInfo,16>,
 struct LightsBuffer{
-     lights: [[stride(48)]] array<LightInfo,16>; //StrideOf(array<LightInfo[, N]>) = roundUp(AlignOf(LightInfo), SizeOf(LightInfo)) = roundUp(16,48) = ceil(48/16) * 16 = 48 
+     lights: array<LightInfo,16>, //StrideOf(array<LightInfo[, N]>) = roundUp(AlignOf(LightInfo), SizeOf(LightInfo)) = roundUp(16,48) = ceil(48/16) * 16 = 48 
 };
-[[block]]
+
 struct SunLightBuffer{
-    sun_light:LightInfo;
+    sun_light:LightInfo,
 };  
 
-[[block]]
+
 struct MaterialColor{
-    color:vec3<f32>;
+    color:vec3<f32>,
 };
 
-[[block]]
+
 struct NormalUniform{
-    matrix:mat4x4<f32>;
+    matrix:mat4x4<f32>,
 };
 
 
-[[group(1), binding(1)]]
-var<uniform> normal_matrix: NormalUniform;
+@group(1) @binding(1) var<uniform> normal_matrix: NormalUniform;
 
-[[group(2),binding(0)]]
-var<uniform> sunLightBuffer:SunLightBuffer;
+@group(2) @binding(0) var<uniform> sunLightBuffer:SunLightBuffer;
 
-[[group(2),binding(1)]]
-var<uniform> lightsBuffer:LightsBuffer;
+@group(2) @binding(1) var<uniform> lightsBuffer:LightsBuffer;
 
-[[group(3), binding(0)]]
-var<uniform> materialColor: MaterialColor;
+@group(3) @binding(0) var<uniform> materialColor: MaterialColor;
 
 
 fn getNearestPoint(point:vec2<f32>)->vec2<f32>{
@@ -215,8 +211,8 @@ fn phongSunLight(light:LightInfo,in:VSOut ) -> vec3<f32> {
 }
 
 
-[[stage(fragment)]]
-fn main(in:VSOut) -> [[location(0)]] vec4<f32> {
+@fragment
+fn main(in:VSOut) -> @location(0) vec4<f32> {
     var result:vec3<f32>  = vec3<f32>(0.0,0.0,0.0);
 
     result = result + phongSunLight(sunLightBuffer.sun_light,in);

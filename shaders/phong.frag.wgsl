@@ -1,44 +1,40 @@
 //Adapted from https://learnopengl.com/Lighting/Basic-Lighting
 struct VSOut {
-    [[builtin(position)]] prop_position: vec4<f32>;
-    [[location(0)]] color: vec3<f32>;
-    [[location(1)]] normal:vec3<f32>;
-    [[location(2)]] texture_coord:vec2<f32>;
-    [[location(3)]] camera_position:vec4<f32>;
-    [[location(4)]] frag_world_position:vec3<f32>;
+    @builtin(position) prop_position: vec4<f32>,
+    @location(0) color: vec3<f32>,
+    @location(1) normal:vec3<f32>,
+    @location(2) texture_coord:vec2<f32>,
+    @location(3) camera_position:vec4<f32>,
+    @location(4) frag_world_position:vec3<f32>,
 };
 
-[[block]]
+
 struct LightPosition{
-    position:vec4<f32>;    
+    position:vec4<f32>,    
 };
 
-[[block]]
+
 struct LightIntensity{
-    intensity:vec3<f32>;      
+    intensity:vec3<f32>,      
 };
 
-[[block]]
+
 struct LightColor{
-    color:vec3<f32>;      
+    color:vec3<f32>,      
 };
 
-[[block]]
+
 struct MaterialColor{
-    color:vec3<f32>;
+    color:vec3<f32>,
 };
 
-[[group(2), binding(0)]]
-var<uniform> lightPosition: LightPosition;
+@group(2) @binding(0) var<uniform> lightPosition: LightPosition;
 
-[[group(2), binding(1)]]
-var<uniform> lightIntensity: LightIntensity;
+@group(2) @binding(1) var<uniform> lightIntensity: LightIntensity;
 
-[[group(2), binding(2)]]
-var<uniform> lightColor: LightColor;
+@group(2) @binding(2) var<uniform> lightColor: LightColor;
 
-[[group(3), binding(0)]]
-var<uniform> materialColor: MaterialColor;
+@group(3) @binding(0) var<uniform> materialColor: MaterialColor;
 
 
 fn phong(light_position:vec4<f32> ,light_intensity:vec3<f32>,light_color:vec3<f32>,in:VSOut ) -> vec3<f32> {
@@ -74,8 +70,8 @@ fn phong(light_position:vec4<f32> ,light_intensity:vec3<f32>,light_color:vec3<f3
     return result;
 }
 
-[[stage(fragment)]]
-fn main(in:VSOut) -> [[location(0)]] vec4<f32> {
+@fragment
+fn main(in:VSOut) -> @location(0) vec4<f32> {
     //Phong
     return vec4<f32>(phong(lightPosition.position,lightIntensity.intensity,lightColor.color,in), 1.0);
 }

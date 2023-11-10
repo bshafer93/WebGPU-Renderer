@@ -1,50 +1,42 @@
 
 struct VSOut {
-    [[builtin(position)]] prop_position: vec4<f32>;
-    [[location(0)]] color: vec3<f32>;
-    [[location(1)]] normal:vec3<f32>;
-    [[location(2)]] texture_coord:vec2<f32>;
+    @builtin(position) prop_position: vec4<f32>,
+    @location(0) color: vec3<f32>,
+    @location(1) normal:vec3<f32>,
+    @location(2) texture_coord:vec2<f32>,
 };
 
-[[block]]
+
 struct LightPosition{
-    position:vec4<f32>;    
+    position:vec4<f32>,    
 };
 
-[[block]]
+
 struct LightIntensity{
-    l:vec3<f32>;      
+    l:vec3<f32>,      
 };
 
-[[block]]
 struct MaterialColor{
-    color:vec3<f32>;
+    color:vec3<f32>,
 };
 
-[[block]]
 struct MaterialRough{
-    rough:f32;       
+    rough:f32,       
 };
 
-[[block]]
 struct MaterialMetal{
-    metal:f32;     
+    metal:f32,     
 };
 
-[[group(2), binding(0)]]
-var<uniform> lightPosition: LightPosition;
+@group(2) @binding(0) var<uniform> lightPosition: LightPosition;
 
-[[group(2), binding(1)]]
-var<uniform> lightIntensity: LightIntensity;
+@group(2) @binding(1) var<uniform> lightIntensity: LightIntensity;
 
-[[group(3), binding(0)]]
-var<uniform> materialColor: MaterialColor;
+@group(3) @binding(0) var<uniform> materialColor: MaterialColor;
 
-[[group(3), binding(1)]]
-var<uniform> materialRoughness: MaterialRough;
+@group(3) @binding(1) var<uniform> materialRoughness: MaterialRough;
 
-[[group(3), binding(2)]]
-var<uniform> materialMetallic: MaterialMetal;
+@group(3) @binding(2) var<uniform> materialMetallic: MaterialMetal;
 
 fn schlickFresnel(lDotH: f32) -> vec3<f32> {
 
@@ -110,8 +102,8 @@ fn microfacetModel(lightIndex:i32,pos:vec3<f32>,n:vec3<f32>) -> vec3<f32>{
 }
 
 
-[[stage(fragment)]]
-fn main(in:VSOut) -> [[location(0)]] vec4<f32> {
+@fragment
+fn main(in:VSOut) -> @location(0) vec4<f32> {
 
     var sum = vec3<f32>(0.0,0.0,0.0);
     var n = normalize(in.normal);
